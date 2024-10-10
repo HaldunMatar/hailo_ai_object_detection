@@ -186,7 +186,7 @@ def main() -> None:
         args = parse_args()
         
         # Load input images
-        images = load_input_images(args.input)
+        images = load_input_images("zidane.jpg")
         
         # Validate images
         try:
