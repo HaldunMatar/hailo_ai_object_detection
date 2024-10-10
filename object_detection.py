@@ -79,6 +79,7 @@ def enqueue_images(
         height (int): Model input height.
         utils (ObjectDetectionUtils): Utility class for object detection preprocessing.
     """
+    
     for batch in divide_list_to_batches(images, batch_size):
         processed_batch = []
         batch_array = []
@@ -158,7 +159,7 @@ def infer(
     height=720  
     width=1280
     enqueue_thread = threading.Thread(
-        target=enqueue_images, 
+        target=[enqueue_images], 
         args=(images, batch_size, input_queue, width, height, utils)
     )
     process_thread = threading.Thread(
