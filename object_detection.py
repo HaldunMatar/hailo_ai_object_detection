@@ -181,25 +181,26 @@ def main() -> None:
     """
     Main function to run the script.
     """
-    # Parse command line arguments
-    args = parse_args()
-    
-    # Load input images
-    images = load_input_images(args.input)
-    
-    # Validate images
-    try:
-        validate_images(images, args.batch_size)
-    except ValueError as e:
-        logger.error(e)
-        return
-    
-    # Create output directory if it doesn't exist
-    output_path = Path('output_images')
-    output_path.mkdir(exist_ok=True)
+    while True:
+        # Parse command line arguments
+        args = parse_args()
+        
+        # Load input images
+        images = load_input_images(args.input)
+        
+        # Validate images
+        try:
+            validate_images(images, args.batch_size)
+        except ValueError as e:
+            logger.error(e)
+            return
+        
+        # Create output directory if it doesn't exist
+        output_path = Path('output_images')
+        output_path.mkdir(exist_ok=True)
 
-    # Start the inference
-    infer(images, args.net, args.labels, args.batch_size, output_path)
+        # Start the inference
+        infer(images, args.net, args.labels, args.batch_size, output_path)
 
 
 if __name__ == "__main__":
