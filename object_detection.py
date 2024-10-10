@@ -185,6 +185,9 @@ def main() -> None:
 
     while True:
         success, frame = cap.read()
+        img_h, img_w = frame.shape[:2]
+        print( 'size ',img_h  , '', img_w)
+
         
         # Parse command line arguments
         args = parse_args()
