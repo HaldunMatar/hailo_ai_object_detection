@@ -78,6 +78,7 @@ class ObjectDetectionUtils:
             color (tuple): Color for the bounding box.
             scale_factor (float): Scale factor for coordinates.
         """
+        print('draw_detection')
         label = f"{self.labels[cls]}: {score:.2f}%"
         ymin, xmin, ymax, xmax = box
         font = ImageFont.truetype(self.label_font, size=15)
@@ -98,6 +99,7 @@ class ObjectDetectionUtils:
             min_score (float): Minimum score threshold. Defaults to 0.45.
             scale_factor (float): Scale factor for coordinates. Defaults to 1.
         """
+        print('visualize')
         boxes = detections['detection_boxes']
         classes = detections['detection_classes']
         scores = detections['detection_scores']
@@ -108,7 +110,7 @@ class ObjectDetectionUtils:
                 color = generate_color(classes[idx])
                 scaled_box = [x * width if i % 2 == 0 else x * height for i, x in enumerate(boxes[idx])]
                 self.draw_detection(draw, scaled_box, classes[idx], scores[idx] * 100.0, color, scale_factor)
-                
+        print(f'{output_path}/output_image{image_id}.jpg')        
         image.save(f'{output_path}/output_image{image_id}.jpg', 'JPEG')
 
     def extract_detections(self, input_data: list, threshold: float = 0.5) -> dict:
