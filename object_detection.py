@@ -184,9 +184,13 @@ def main() -> None:
     while True:
         # Parse command line arguments
         args = parse_args()
+        print(args)
+        print(type(args))
+        print(args.input)
+        print(type(args.input))
         
         # Load input images
-        images = load_input_images("zidane.jpg")
+        images = load_input_images(args.input)
         
         # Validate images
         try:
