@@ -11,7 +11,8 @@ import threading
 from PIL import Image
 from typing import List
 from object_detection_utils import ObjectDetectionUtils
-
+import cv2
+from PIL import Image
 # Add the parent directory to the system path to access utils module
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils import HailoAsyncInference, load_input_images, validate_images, divide_list_to_batches
@@ -181,8 +182,21 @@ def main() -> None:
     """
     Main function to run the script.
     """
+    cap = cv2.VideoCapture("peopleinmall.mp4")
+    images = []
     while True:
+        images = []
         # Parse command line arguments
+        success, frame = cap.read()
+        if not success:
+            break
+            # Convert the frame (OpenCV image) to RGB, then to a PIL image
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(frame_rgb)
+
+        # Append the PIL image to the list
+        images.append(pil_image)
+        
         args = parse_args()
         print(args)
         print(type(args))
@@ -190,7 +204,7 @@ def main() -> None:
         print(type(args.input))
         
         # Load input images
-        images = load_input_images(args.input)
+        # images = load_input_images(args.input)
         
         # Validate images
         try:
