@@ -11,7 +11,7 @@ import threading
 from PIL import Image
 from typing import List
 from object_detection_utils import ObjectDetectionUtils
-
+import cv2
 # Add the parent directory to the system path to access utils module
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils import HailoAsyncInference, load_input_images, validate_images, divide_list_to_batches
@@ -181,16 +181,20 @@ def main() -> None:
     """
     Main function to run the script.
     """
+    cap = cv2.VideoCapture("peopleinmall.mp4")
+
     while True:
+        success, frame = cap.read()
+        
         # Parse command line arguments
         args = parse_args()
         
         # Load input images
-        images = load_input_images(args.input)
+        # images = load_input_images(args.input)
         
         # Validate images
         try:
-            validate_images(images, args.batch_size)
+            validate_images(frame, args.batch_size)
         except ValueError as e:
             logger.error(e)
             return
@@ -200,7 +204,7 @@ def main() -> None:
         output_path.mkdir(exist_ok=True)
 
         # Start the inference
-        infer(images, args.net, args.labels, args.batch_size, output_path)
+        infer(frame, args.net, args.labels, args.batch_size, output_path)
 
 
 if __name__ == "__main__":
