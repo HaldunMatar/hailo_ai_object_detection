@@ -78,8 +78,9 @@ class ObjectDetectionUtils:
             color (tuple): Color for the bounding box.
             scale_factor (float): Scale factor for coordinates.
         """
-        print('draw_detection')
+        
         label = f"{self.labels[cls]}: {score:.2f}%"
+        print('draw_detection : label')
         ymin, xmin, ymax, xmax = box
         font = ImageFont.truetype(self.label_font, size=15)
         draw.rectangle([(xmin * scale_factor, ymin * scale_factor), (xmax * scale_factor, ymax * scale_factor)], outline=color, width=2)
