@@ -100,6 +100,8 @@ class ObjectDetectionUtils:
             min_score (float): Minimum score threshold. Defaults to 0.45.
             scale_factor (float): Scale factor for coordinates. Defaults to 1.
         """
+        print(type(image))
+        print(image)
         print('visualize')
         boxes = detections['detection_boxes']
         classes = detections['detection_classes']
