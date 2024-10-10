@@ -189,11 +189,12 @@ def main() -> None:
     while True:
         success, frame = cap.read()
         img_h, img_w = frame.shape[:2]
+        
         print( 'size ',img_h  , '', img_w)
 
         
         # Parse command line arguments
-        args = parse_args()
+        # args = parse_args()
         
         # Load input images
         # images = load_input_images(args.input)
@@ -207,7 +208,7 @@ def main() -> None:
         
         # Create output directory if it doesn't exist
         output_path = Path('output_images')
-        output_path.mkdir(exist_ok=True)
+        # output_path.mkdir(exist_ok=True)
 
         # Start the inference
         infer(frame, args.net, args.labels, args.batch_size, output_path)
