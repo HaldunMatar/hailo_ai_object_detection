@@ -194,7 +194,7 @@ def main() -> None:
 
         
         # Parse command line arguments
-        # args = parse_args()
+        args = parse_args()
         
         # Load input images
         # images = load_input_images(args.input)
