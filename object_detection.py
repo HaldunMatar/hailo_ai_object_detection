@@ -16,7 +16,7 @@ import cv2
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils import HailoAsyncInference, load_input_images, validate_images, divide_list_to_batches
 
-
+from PIL import Image
 def parse_args() -> argparse.Namespace:
     """
     Initialize argument parser for the script.
@@ -189,6 +189,8 @@ def main() -> None:
     while True:
         success, frame = cap.read()
         img_h, img_w = frame.shape[:2]
+        
+        frame = Image.fromarray(frame)  
         
         print( 'size ',img_h  , '', img_w)
 
