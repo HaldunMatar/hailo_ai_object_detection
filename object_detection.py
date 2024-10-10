@@ -193,11 +193,11 @@ def main() -> None:
         # images = load_input_images(args.input)
         
         # Validate images
-        try:
-            validate_images(frame, args.batch_size)
-        except ValueError as e:
-            logger.error(e)
-            return
+        # try:
+        #     validate_images(frame, args.batch_size)
+        # except ValueError as e:
+        #     logger.error(e)
+        #     return
         
         # Create output directory if it doesn't exist
         output_path = Path('output_images')
