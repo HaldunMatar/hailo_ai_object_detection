@@ -84,7 +84,8 @@ def enqueue_images(
         batch_array = []
         
         for image in batch:
-            processed_image = utils.preprocess(image, width, height)
+            
+            processed_image = utils.preprocess(image, 1280, 720)
             processed_batch.append(processed_image)
             batch_array.append(np.array(processed_image))
         
@@ -120,7 +121,7 @@ def process_output(
         detections = utils.extract_detections(infer_results[0])
         utils.visualize(
             detections, processed_image, image_id, 
-            output_path, width, height
+            output_path,  720  ,1280
         )
         image_id += 1
     
@@ -154,6 +155,8 @@ def infer(
     )
     height, width, _ = hailo_inference.get_input_shape()
 
+    height=720  
+    width=1280
     enqueue_thread = threading.Thread(
         target=enqueue_images, 
         args=(images, batch_size, input_queue, width, height, utils)
