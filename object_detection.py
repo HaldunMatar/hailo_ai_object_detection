@@ -11,12 +11,11 @@ import threading
 from PIL import Image
 from typing import List
 from object_detection_utils import ObjectDetectionUtils
-import cv2
-from PIL import Image
+
 # Add the parent directory to the system path to access utils module
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils import HailoAsyncInference, load_input_images, validate_images, divide_list_to_batches
-image_id = 0
+
 
 def parse_args() -> argparse.Namespace:
     """
@@ -111,8 +110,7 @@ def process_output(
         height (int): Image height.
         utils (ObjectDetectionUtils): Utility class for object detection visualization.
     """
-    
-    
+    image_id = 0
     while True:
         result = output_queue.get()
         if result is None:
