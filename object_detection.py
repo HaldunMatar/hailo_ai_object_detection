@@ -185,7 +185,9 @@ def main() -> None:
     Main function to run the script.
     """
     # cap = cv2.VideoCapture("peopleinmall.mp4")
-    cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.167:554/Streaming/Channels/1/")
+    # cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.167:554/Streaming/Channels/1/")
+    cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
+    
     
     images = []
     while True:
