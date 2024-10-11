@@ -94,7 +94,7 @@ def enqueue_images(
 
     input_queue.put(None)  # Add sentinel value to signal end of input
 
-
+image_id = 0
 def process_output(
     output_queue: queue.Queue, 
     output_path: Path, 
@@ -112,7 +112,7 @@ def process_output(
         height (int): Image height.
         utils (ObjectDetectionUtils): Utility class for object detection visualization.
     """
-    image_id = 0
+
     
     while True:
         result = output_queue.get()
@@ -184,7 +184,9 @@ def main() -> None:
     """
     Main function to run the script.
     """
-    cap = cv2.VideoCapture("peopleinmall.mp4")
+    # cap = cv2.VideoCapture("peopleinmall.mp4")
+    cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.167:554/Streaming/Channels/1/")
+    
     images = []
     while True:
         images = []
