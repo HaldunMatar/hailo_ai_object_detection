@@ -94,7 +94,7 @@ def enqueue_images(
 
     input_queue.put(None)  # Add sentinel value to signal end of input
 
-image_id = 0
+
 def process_output(
     output_queue: queue.Queue, 
     output_path: Path, 
@@ -112,7 +112,7 @@ def process_output(
         height (int): Image height.
         utils (ObjectDetectionUtils): Utility class for object detection visualization.
     """
-
+    image_id = 0
     
     while True:
         result = output_queue.get()
