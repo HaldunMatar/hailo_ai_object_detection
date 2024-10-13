@@ -17,7 +17,7 @@ from PIL import Image
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils import HailoAsyncInference, load_input_images, validate_images, divide_list_to_batches
 
-
+import hailo
 
 def parse_args() -> argparse.Namespace:
     """
@@ -188,43 +188,64 @@ def main() -> None:
     # cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.167:554/Streaming/Channels/1/")
     cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
     
-    
-    images = []
-    while True:
-        images = []
-        # Parse command line arguments
+    cap = cv2.VideoCapture("speed3.mp4")
+    device = hailo.Device()
+    pipeline = hailo.create_pipeline(device)
+
+    while True:                              
         success, frame = cap.read()
         if not success:
             break
-            # Convert the frame (OpenCV image) to RGB, then to a PIL image
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        pil_image = Image.fromarray(frame_rgb)
-
-        # Append the PIL image to the list
-        images.append(pil_image)
         
-        args = parse_args()
-        print(args)
-        print(type(args))
-        print(args.input)
-        print(type(args.input))
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         
-        # Load input images
-        # images = load_input_images(args.input)
-        
-        # Validate images
         try:
-            validate_images(images, args.batch_size)
-        except ValueError as e:
-            logger.error(e)
-            return
-        
-        # Create output directory if it doesn't exist
-        output_path = Path('output_images')
-        output_path.mkdir(exist_ok=True)
+            roi = hailo.get_roi_from_buffer(frame)
+            detections = roi.get_objects_typed(hailo.HAILO_DETECTION)
+            print('hailo while ',detections)
+            # Process detections...
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            break
 
-        # Start the inference
-        infer(images, args.net, args.labels, args.batch_size, output_path)
+    cap.release()
+    cv2.destroyAllWindows()
+    # images = []
+    # while True:
+    #     images = []
+    #     # Parse command line arguments
+    #     success, frame = cap.read()
+    #     if not success:
+    #         break
+    #         # Convert the frame (OpenCV image) to RGB, then to a PIL image
+    #     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #     pil_image = Image.fromarray(frame_rgb)
+
+    #     # Append the PIL image to the list
+    #     images.append(pil_image)
+        
+    #     args = parse_args()
+    #     print(args)
+    #     print(type(args))
+    #     print(args.input)
+    #     print(type(args.input))
+        
+    #     # Load input images
+    #     # images = load_input_images(args.input)
+        
+    #     # Validate images
+    #     try:
+    #         validate_images(images, args.batch_size)
+    #     except ValueError as e:
+    #         logger.error(e)
+    #         return
+        
+    #     # Create output directory if it doesn't exist
+    #     output_path = Path('output_images')
+    #     output_path.mkdir(exist_ok=True)
+
+    #     # Start the inference
+    #     infer(images, args.net, args.labels, args.batch_size, output_path)
 
 
 if __name__ == "__main__":
