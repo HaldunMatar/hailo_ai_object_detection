@@ -225,7 +225,7 @@ def main() -> None:
         process_thread.start()
         
         # Start the inference
-        infer(images, args.net, args.labels, args.batch_size, output_path,input_queue,output_queue,hailo_inference)
+        infer(images, args.net, args.labels, args.batch_size, output_path,input_queue,output_queue,process_thread,hailo_inference)
 
 
 if __name__ == "__main__":
