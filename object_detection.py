@@ -169,8 +169,9 @@ def infer(
         output_path (Path): Path to save the output images.
     """
 
-    print('infer')
+    print('before infer')
     hailo_inference.run()
+    print('after infer')
 
     enqueue_thread.join()
     output_queue.put(None)  # Signal process thread to exit
