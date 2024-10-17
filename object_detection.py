@@ -111,7 +111,7 @@ def enqueue_images(
             input_queue.put(processed_batch)
 
         input_queue.put(None)  # Add sentinel value to signal end of input
-        time.sleep(1)
+        #time.sleep(1)
 
 
 def process_output(
@@ -146,7 +146,7 @@ def process_output(
             output_path, width, height
         )
         image_id += 1
-        time.sleep(1)
+        #time.sleep(1)
     
     output_queue.task_done()  # Indicate that processing is complete
 
@@ -172,7 +172,7 @@ def infer(
     print('before infer')
     while True :
         hailo_inference.run()
-        time.sleep(1)
+        #time.sleep(1)
         print(' infer')
     print('after infer')
 
