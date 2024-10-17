@@ -135,7 +135,7 @@ def infer(
     net_path: str, 
     labels_path: str, 
     batch_size: int, 
-    output_path: Path,input_queue,output_queue
+    output_path: Path,input_queue,output_queue,enqueue_thread,process_thread,hailo_inference
 ) -> None:
     """
     Initialize queues, HailoAsyncInference instance, and run the inference.
@@ -147,26 +147,7 @@ def infer(
         batch_size (int): Number of images per batch.
         output_path (Path): Path to save the output images.
     """
-    utils = ObjectDetectionUtils(labels_path)
-    
-   
-    
-    hailo_inference = HailoAsyncInference(
-        net_path, input_queue, output_queue, batch_size
-    )
-    height, width, _ = hailo_inference.get_input_shape()
 
-    enqueue_thread = threading.Thread(
-        target=enqueue_images, 
-        args=(images, batch_size, input_queue, width, height, utils)
-    )
-    process_thread = threading.Thread(
-        target=process_output, 
-        args=(output_queue, output_path, width, height, utils)
-    )
-    
-    enqueue_thread.start()
-    process_thread.start()
     
     hailo_inference.run()
 
@@ -221,10 +202,30 @@ def main() -> None:
         # Create output directory if it doesn't exist
         output_path = Path('output_images')
         output_path.mkdir(exist_ok=True)
+        
         input_queue = queue.Queue()
         output_queue = queue.Queue()
+        
+        utils = ObjectDetectionUtils(args.labels)
+        hailo_inference = HailoAsyncInference(
+             args.net, input_queue, output_queue, args.batch_size
+        )
+        height, width, _ = hailo_inference.get_input_shape()
+
+        enqueue_thread = threading.Thread(
+            target=enqueue_images, 
+            args=(images, args.batch_size, input_queue, width, height, utils)
+        )
+        process_thread = threading.Thread(
+            target=process_output, 
+            args=(output_queue, output_path, width, height, utils)
+        )
+        
+        enqueue_thread.start()
+        process_thread.start()
+        
         # Start the inference
-        infer(images, args.net, args.labels, args.batch_size, output_path,input_queue,output_queue)
+        infer(images, args.net, args.labels, args.batch_size, output_path,input_queue,output_queue,hailo_inference)
 
 
 if __name__ == "__main__":
