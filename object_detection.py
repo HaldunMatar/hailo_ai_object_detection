@@ -170,7 +170,10 @@ def infer(
     """
 
     print('before infer')
-    hailo_inference.run()
+    while True :
+        hailo_inference.run()
+        time.sleep(1)
+        print(' infer')
     print('after infer')
 
     enqueue_thread.join()
