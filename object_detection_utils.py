@@ -56,7 +56,7 @@ class ObjectDetectionUtils:
         Returns:
             PIL.Image.Image: Preprocessed and padded image.
         """
-        print('preprocess')
+        # print('preprocess')
         img_w, img_h = image.size
         scale = min(model_w / img_w, model_h / img_h)
         new_img_w, new_img_h = int(img_w * scale), int(img_h * scale)

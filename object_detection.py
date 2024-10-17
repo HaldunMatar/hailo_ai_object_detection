@@ -4,6 +4,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
+import time
 import numpy as np
 from loguru import logger
 import queue
@@ -83,8 +84,9 @@ def enqueue_images(
     """
     cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
     images = []
-    print('enqueue_images')
+    
     while True:
+        print('enqueue_images')
     # if(1==1)  :  
         images = []
         # Parse command line arguments
@@ -109,6 +111,7 @@ def enqueue_images(
             input_queue.put(processed_batch)
 
         input_queue.put(None)  # Add sentinel value to signal end of input
+        time.sleep(1)
 
 
 def process_output(
@@ -129,8 +132,9 @@ def process_output(
         utils (ObjectDetectionUtils): Utility class for object detection visualization.
     """
     image_id = 0
-    print('process_output')
+    
     while True:
+        print('process_output')
         result = output_queue.get()
         if result is None:
             break  # Exit the loop if sentinel value is received
@@ -142,6 +146,7 @@ def process_output(
             output_path, width, height
         )
         image_id += 1
+        time.sleep(1)
     
     output_queue.task_done()  # Indicate that processing is complete
 
