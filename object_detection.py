@@ -81,18 +81,33 @@ def enqueue_images(
         height (int): Model input height.
         utils (ObjectDetectionUtils): Utility class for object detection preprocessing.
     """
-    for batch in divide_list_to_batches(images, batch_size):
-        processed_batch = []
-        batch_array = []
-        
-        for image in batch:
-            processed_image = utils.preprocess(image, width, height)
-            processed_batch.append(processed_image)
-            batch_array.append(np.array(processed_image))
-        
-        input_queue.put(processed_batch)
+    cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
+    images = []
+    while True:
+    # if(1==1)  :  
+        images = []
+        # Parse command line arguments
+        success, frame = cap.read()
+        # if not success:
+            # break
+            # Convert the frame (OpenCV image) to RGB, then to a PIL image
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(frame_rgb)
 
-    input_queue.put(None)  # Add sentinel value to signal end of input
+        # Append the PIL image to the list
+        images.append(pil_image)
+        for batch in divide_list_to_batches(images, batch_size):
+            processed_batch = []
+            batch_array = []
+            
+            for image in batch:
+                processed_image = utils.preprocess(image, width, height)
+                processed_batch.append(processed_image)
+                batch_array.append(np.array(processed_image))
+            
+            input_queue.put(processed_batch)
+
+        input_queue.put(None)  # Add sentinel value to signal end of input
 
 
 def process_output(
@@ -167,38 +182,36 @@ def main() -> None:
     # cap = cv2.VideoCapture("peopleinmall.mp4")
     # cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.167:554/Streaming/Channels/1/")
     cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
-    
-    
     images = []
     # while True:
     if(1==1)  :  
         images = []
         # Parse command line arguments
-        success, frame = cap.read()
+        # success, frame = cap.read()
         # if not success:
             # break
             # Convert the frame (OpenCV image) to RGB, then to a PIL image
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        pil_image = Image.fromarray(frame_rgb)
+        # frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # pil_image = Image.fromarray(frame_rgb)
 
         # Append the PIL image to the list
-        images.append(pil_image)
+        # images.append(pil_image)
         
         args = parse_args()
-        print(args)
-        print(type(args))
-        print(args.input)
-        print(type(args.input))
+        # print(args)
+        # print(type(args))
+        # print(args.input)
+        # print(type(args.input))
         
         # Load input images
         # images = load_input_images(args.input)
         
         # Validate images
-        try:
-            validate_images(images, args.batch_size)
-        except ValueError as e:
-            logger.error(e)
-            return
+        # try:
+        #     validate_images(images, args.batch_size)
+        # except ValueError as e:
+        #     logger.error(e)
+        #     return
         
         # Create output directory if it doesn't exist
         output_path = Path('output_images')
