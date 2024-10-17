@@ -151,13 +151,8 @@ def process_output(
     output_queue.task_done()  # Indicate that processing is complete
 
 
-def infer(
-    images: List[Image.Image], 
-    net_path: str, 
-    labels_path: str, 
-    batch_size: int, 
-    output_path: Path,input_queue,output_queue,enqueue_thread,process_thread,hailo_inference
-) -> None:
+def infer(hailo_inference
+    ) -> None:
     """
     Initialize queues, HailoAsyncInference instance, and run the inference.
 
@@ -176,81 +171,43 @@ def infer(
         print(' infer')
     print('after infer')
 
-    enqueue_thread.join()
-    output_queue.put(None)  # Signal process thread to exit
-    process_thread.join()
-
-    logger.info(
-        f'Inference was successful! Results have been saved in {output_path}'
-    )
 
 
 def main() -> None:
     """
     Main function to run the script.
     """
-    # cap = cv2.VideoCapture("peopleinmall.mp4")
-    # cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.167:554/Streaming/Channels/1/")
     cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
     images = []
-    # while True:
-    if(1==1)  :  
-        images = []
-        # Parse command line arguments
-        # success, frame = cap.read()
-        # if not success:
-            # break
-            # Convert the frame (OpenCV image) to RGB, then to a PIL image
-        # frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        # pil_image = Image.fromarray(frame_rgb)
+    args = parse_args()
+    output_path = Path('output_images')
+    output_path.mkdir(exist_ok=True)
+    
+    input_queue = queue.Queue()
+    output_queue = queue.Queue()
+    
+    utils = ObjectDetectionUtils(args.labels)
+    
+    hailo_inference = HailoAsyncInference(
+        args.net, input_queue, output_queue, args.batch_size
+        )
+    height, width, _ = hailo_inference.get_input_shape()
 
-        # Append the PIL image to the list
-        # images.append(pil_image)
-        
-        args = parse_args()
-        # print(args)
-        # print(type(args))
-        # print(args.input)
-        # print(type(args.input))
-        
-        # Load input images
-        # images = load_input_images(args.input)
-        
-        # Validate images
-        # try:
-        #     validate_images(images, args.batch_size)
-        # except ValueError as e:
-        #     logger.error(e)
-        #     return
-        
-        # Create output directory if it doesn't exist
-        output_path = Path('output_images')
-        output_path.mkdir(exist_ok=True)
-        
-        input_queue = queue.Queue()
-        output_queue = queue.Queue()
-        
-        utils = ObjectDetectionUtils(args.labels)
-        hailo_inference = HailoAsyncInference(
-             args.net, input_queue, output_queue, args.batch_size
+    enqueue_thread = threading.Thread(
+    target=enqueue_images, 
+        args=(images, args.batch_size, input_queue, width, height, utils)
         )
-        height, width, _ = hailo_inference.get_input_shape()
+    process_thread = threading.Thread(
+        target=process_output, 
+        args=(output_queue, output_path, width, height, utils)
+        )
+    process_thread.start()
+    enqueue_thread.start()
 
-        enqueue_thread = threading.Thread(
-            target=enqueue_images, 
-            args=(images, args.batch_size, input_queue, width, height, utils)
-        )
-        process_thread = threading.Thread(
-            target=process_output, 
-            args=(output_queue, output_path, width, height, utils)
-        )
-        process_thread.start()
-        enqueue_thread.start()
-        
-        
-        
-        # Start the inference
-        infer(images, args.net, args.labels, args.batch_size, output_path,input_queue,output_queue,enqueue_thread ,process_thread,hailo_inference)
+
+
+    # Start the inference
+    infer(hailo_inference)
 
 
 if __name__ == "__main__":
