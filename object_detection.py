@@ -64,8 +64,8 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def enqueue_images(
-    images: List[Image.Image], 
+def enqueue_images(cam_url,
+    
     batch_size: int, 
     input_queue: queue.Queue, 
     width: int, 
@@ -82,7 +82,9 @@ def enqueue_images(
         height (int): Model input height.
         utils (ObjectDetectionUtils): Utility class for object detection preprocessing.
     """
-    cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
+
+    cap = cv2.VideoCapture(cam_url)
+    
     images = []
     
     while True:
@@ -177,8 +179,7 @@ def main() -> None:
     """
     Main function to run the script.
     """
-    cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
-    images = []
+    cam_url="rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/"
     args = parse_args()
     output_path = Path('output_images')
     output_path.mkdir(exist_ok=True)
@@ -195,7 +196,7 @@ def main() -> None:
 
     enqueue_thread = threading.Thread(
     target=enqueue_images, 
-        args=(images, args.batch_size, input_queue, width, height, utils)
+        args=( cam_url ,args.batch_size, input_queue, width, height, utils)
         )
     process_thread = threading.Thread(
         target=process_output, 
