@@ -83,6 +83,7 @@ def enqueue_images(
     """
     cap = cv2.VideoCapture("rtsp://admin:anas1155@192.168.1.168:554/Streaming/Channels/1/")
     images = []
+    print('enqueue_images')
     while True:
     # if(1==1)  :  
         images = []
@@ -128,7 +129,7 @@ def process_output(
         utils (ObjectDetectionUtils): Utility class for object detection visualization.
     """
     image_id = 0
-    
+    print('process_output')
     while True:
         result = output_queue.get()
         if result is None:
@@ -163,7 +164,7 @@ def infer(
         output_path (Path): Path to save the output images.
     """
 
-    
+    print('infer')
     hailo_inference.run()
 
     enqueue_thread.join()
