@@ -135,7 +135,7 @@ def infer(
     net_path: str, 
     labels_path: str, 
     batch_size: int, 
-    output_path: Path
+    output_path: Path,input_queue,output_queue
 ) -> None:
     """
     Initialize queues, HailoAsyncInference instance, and run the inference.
@@ -149,8 +149,7 @@ def infer(
     """
     utils = ObjectDetectionUtils(labels_path)
     
-    input_queue = queue.Queue()
-    output_queue = queue.Queue()
+   
     
     hailo_inference = HailoAsyncInference(
         net_path, input_queue, output_queue, batch_size
@@ -222,9 +221,10 @@ def main() -> None:
         # Create output directory if it doesn't exist
         output_path = Path('output_images')
         output_path.mkdir(exist_ok=True)
-
+        input_queue = queue.Queue()
+        output_queue = queue.Queue()
         # Start the inference
-        infer(images, args.net, args.labels, args.batch_size, output_path)
+        infer(images, args.net, args.labels, args.batch_size, output_path,input_queue,output_queue)
 
 
 if __name__ == "__main__":
