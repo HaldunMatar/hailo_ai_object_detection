@@ -240,10 +240,10 @@ def main() -> None:
             target=process_output, 
             args=(output_queue, output_path, width, height, utils)
         )
-        
+        process_thread.start()
         enqueue_thread.start()
         
-        process_thread.start()
+        
         
         # Start the inference
         infer(images, args.net, args.labels, args.batch_size, output_path,input_queue,output_queue,enqueue_thread ,process_thread,hailo_inference)
