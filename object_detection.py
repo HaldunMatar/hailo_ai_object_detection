@@ -144,9 +144,10 @@ def process_output(
         processed_image, infer_results = result
         detections = utils.extract_detections(infer_results[0])
         utils.visualize(
-            detections, processed_image, image_id, 
-            output_path, width, height
-        )
+                        detections, processed_image, image_id, 
+                        output_path, width, height
+                       )
+        
         image_id += 1
         #time.sleep(1)
     

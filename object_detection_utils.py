@@ -100,9 +100,7 @@ class ObjectDetectionUtils:
             min_score (float): Minimum score threshold. Defaults to 0.45.
             scale_factor (float): Scale factor for coordinates. Defaults to 1.
         """
-        print(type(image))
-        print(image)
-        print('visualize')
+
         boxes = detections['detection_boxes']
         classes = detections['detection_classes']
         scores = detections['detection_scores']
@@ -113,8 +111,14 @@ class ObjectDetectionUtils:
                 color = generate_color(classes[idx])
                 scaled_box = [x * width if i % 2 == 0 else x * height for i, x in enumerate(boxes[idx])]
                 self.draw_detection(draw, scaled_box, classes[idx], scores[idx] * 100.0, color, scale_factor)
+        print('draw type ' ,type(draw))
+        print('draw  ' ,draw)
+        
         print(f'{output_path}/output_image{image_id}.jpg')        
         image.save(f'{output_path}/output_image{image_id}.jpg', 'JPEG')
+        print('image type ' ,type(image))
+        print('image  ' ,image)
+       
 
     def extract_detections(self, input_data: list, threshold: float = 0.5) -> dict:
         """
