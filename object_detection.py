@@ -170,12 +170,13 @@ def main() -> None:
     
     
     images = []
-    while True:
+    # while True:
+    if(1==1)  :  
         images = []
         # Parse command line arguments
         success, frame = cap.read()
-        if not success:
-            break
+        # if not success:
+            # break
             # Convert the frame (OpenCV image) to RGB, then to a PIL image
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(frame_rgb)
@@ -222,6 +223,7 @@ def main() -> None:
         )
         
         enqueue_thread.start()
+        
         process_thread.start()
         
         # Start the inference
